@@ -1,0 +1,3 @@
+google-trends-snapshot==0.1.0
+Pillow==5.0.0
+selenium==3.8.1
