@@ -4,23 +4,31 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.chrome.options import Options
 
 from PIL import Image
 
-trends = []
+WINDOW_SIZE = "1920,1080"
+#CHROMEDRIVER_PATH = './drivers'
 
+chrome_options = Options()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--window-size=%s' % WINDOW_SIZE)
+#chrome_options.binary_location = CHROME_PATH
 
 def repl(args=None):
     if args is None:
         args = sys.argv[1:]
     
-    launch_browser()
+    take_snapshot(['funhaus', 'achievement hunter'])
 
-def launch_browser():
-    browser = webdriver.Chrome()
+def take_snapshot(terms):
+    browser = webdriver.Chrome(
+        #executable_path=CHROMEDRIVER_PATH,
+        chrome_options=chrome_options)
     browser.get('https://trends.google.com/trends/')
     searchbar = browser.find_element_by_tag_name('search').find_element_by_tag_name('input')
-    searchbar.send_keys('funhaus, rooster teeth')
+    searchbar.send_keys(', '.join(terms))
     searchbar.send_keys(Keys.ENTER)
 
     sleep(3)
@@ -33,7 +41,7 @@ def launch_browser():
     graph_loc = graph.location
     graph_size = graph.size
 
-    line_chart = browser.find_element_by_tag_name('line-chart-directive')
+    line_chart = browser.find_element_by_css_selector('line-chart-directive svg')
     hover = ActionChains(browser).move_to_element_with_offset(
             line_chart,
             int(line_chart.size['width'] * 0.98),
@@ -44,13 +52,13 @@ def launch_browser():
     browser.quit()
 
     img = Image.open('screenshot.png')
-    left = header_loc['x']
+    left = graph_loc['x']
     top = header_loc['y']
-    right = header_loc['x'] + header_size['width']
+    right = graph_loc['x'] + graph_size['width']
     bottom = graph_loc['y'] + graph_size['height']
 
     img = img.crop((left, top, right, bottom))
-    img.save('screenshot2.png')
+    img.save('screenshot.png')
 
 if __name__ == '__main__':
     repl()
