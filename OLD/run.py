@@ -1,0 +1,3 @@
+import google_trends_snapshot
+
+google_trends_snapshot.run()

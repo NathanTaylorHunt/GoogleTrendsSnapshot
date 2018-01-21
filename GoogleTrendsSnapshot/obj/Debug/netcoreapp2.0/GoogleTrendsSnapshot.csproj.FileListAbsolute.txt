@@ -1,0 +1,10 @@
+C:\Projects\GoogleTrendsSnapshot\GoogleTrendsSnapshot\bin\Debug\netcoreapp2.0\GoogleTrendsSnapshot.deps.json
+C:\Projects\GoogleTrendsSnapshot\GoogleTrendsSnapshot\bin\Debug\netcoreapp2.0\GoogleTrendsSnapshot.runtimeconfig.json
+C:\Projects\GoogleTrendsSnapshot\GoogleTrendsSnapshot\bin\Debug\netcoreapp2.0\GoogleTrendsSnapshot.runtimeconfig.dev.json
+C:\Projects\GoogleTrendsSnapshot\GoogleTrendsSnapshot\bin\Debug\netcoreapp2.0\GoogleTrendsSnapshot.dll
+C:\Projects\GoogleTrendsSnapshot\GoogleTrendsSnapshot\bin\Debug\netcoreapp2.0\GoogleTrendsSnapshot.pdb
+C:\Projects\GoogleTrendsSnapshot\GoogleTrendsSnapshot\obj\Debug\netcoreapp2.0\GoogleTrendsSnapshot.csproj.CoreCompileInputs.cache
+C:\Projects\GoogleTrendsSnapshot\GoogleTrendsSnapshot\obj\Debug\netcoreapp2.0\GoogleTrendsSnapshot.AssemblyInfoInputs.cache
+C:\Projects\GoogleTrendsSnapshot\GoogleTrendsSnapshot\obj\Debug\netcoreapp2.0\GoogleTrendsSnapshot.AssemblyInfo.cs
+C:\Projects\GoogleTrendsSnapshot\GoogleTrendsSnapshot\obj\Debug\netcoreapp2.0\GoogleTrendsSnapshot.dll
+C:\Projects\GoogleTrendsSnapshot\GoogleTrendsSnapshot\obj\Debug\netcoreapp2.0\GoogleTrendsSnapshot.pdb
