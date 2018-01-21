@@ -8,7 +8,7 @@ Use the terminal program to enter terms and effortlessly take snapshots.
 <kbd>![alt text](https://github.com/NathanTaylorHunt/GoogleTrendsSnapshot/raw/master/screenshot-console.png "Console Screenshot")</kbd>
 
 ### Resulting Snapshot:
-<kbd>![alt text](https://github.com/NathanTaylorHunt/GoogleTrendsSnapshot/raw/master/screenshot-graph.png "Console Screenshot")</kbd>
+<kbd>![alt text](https://github.com/NathanTaylorHunt/GoogleTrendsSnapshot/raw/master/screenshot-graph.png "Resulting Snapshot")</kbd>
 
 ## How to Use
 Enter search terms by typing them into the console.  Terms are added to the list.
@@ -26,7 +26,7 @@ To run it, unzip Standalone-Win10.zip, and run GoogleTrendsSnapshot.exe.
 By default, the snapshot files will be saved to the 'snapshots' folder in the same directory as the exe.
 
 ## Installation
-To run, you must have [dotnet core 2.0](https://github.com/dotnet/core/blob/master/release-notes/download-archives/2.0.0-download.md) installed.
+To compile the program, you must have [dotnet core 2.0](https://github.com/dotnet/core/blob/master/release-notes/download-archives/2.0.0-download.md) installed.
 
 ## Building and Running
 
@@ -39,3 +39,9 @@ To run:
 ```
 dotnet run
 ```
+
+## Configurations
+Different configuration settings can be changed in config.ini
+
+The program will look for config.ini in the current working directory.
+If it cannot find it, defaults will be used instead.
