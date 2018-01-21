@@ -26,7 +26,7 @@ namespace GoogleTrendsSnapshot
         {
             // Ensure chromedriver.exe can be found.
             var chromeDriverDir = Path.GetFullPath(options.ChromeDriverDirectory);
-            if (!File.Exists(chromeDriverDir + "/chromedriver.exe"))
+            if (!File.Exists(chromeDriverDir + "\\chromedriver.exe"))
             {
                 Console.WriteLine(">>> chromedriver.exe NOT FOUND");
                 Console.WriteLine(">>> " + chromeDriverDir);
@@ -123,10 +123,11 @@ namespace GoogleTrendsSnapshot
         /// <returns>Filename for snapshot.</returns>
         public static string GetSnapshotFileName(string directory, string extension)
         {
-            var files = Directory.GetFiles(directory, "*", SearchOption.TopDirectoryOnly);
+            var fullDirectory = Path.GetFullPath(directory);
+            var files = Directory.GetFiles(fullDirectory, "*", SearchOption.TopDirectoryOnly);
             var fileCount = files.Length + 1;
-            return string.Format("{0}/{1}_snapshot.{2}",
-                    directory,
+            return string.Format("{0}\\{1}_snapshot.{2}",
+                    fullDirectory,
                     fileCount.ToString().PadLeft(3, '0'),
                     extension);
         }
