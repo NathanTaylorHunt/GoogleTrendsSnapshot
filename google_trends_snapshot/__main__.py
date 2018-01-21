@@ -1,4 +1,5 @@
 import sys
+import os
 from time import sleep
 
 from selenium import webdriver
@@ -8,6 +9,7 @@ from selenium.webdriver.chrome.options import Options
 
 from PIL import Image
 
+PROMPT = '> '
 WINDOW_SIZE = "1920,1080"
 #CHROMEDRIVER_PATH = './drivers'
 
@@ -20,22 +22,72 @@ def repl(args=None):
     if args is None:
         args = sys.argv[1:]
     
-    take_snapshot(['funhaus', 'achievement hunter'])
+    should_quit = False
+    while not should_quit:
+        print('\n\nEnter round term:')
+        round_term = str(input(PROMPT))
 
-def take_snapshot(terms):
+        if round_term == 'exit':
+            should_quit = True
+            return
+
+        entering_terms = True
+        search_terms = []
+        while entering_terms:
+            print('\n')
+            print('ROUND: ' + round_term)
+            if search_terms:
+                print('\nSEARCH TERMS:')
+                for idx, term in enumerate(search_terms):
+                    print('(%d) \'%s\'' % (idx+1, term))
+            else:
+                print('\nSEARCH TERMS: NONE')
+
+            print('\nEnter a new search term (5 max).')
+            print('Type \'snap\' to take a snapshot.')
+            print('Type \'delete\' plus a number to delete a term.')
+            print('Type \'clear\' to clear search terms.')
+            print('Type \'new\' to start a new round.')
+            print('Type \'exit\' to quit.')
+            search_term = str(input(PROMPT))
+
+            if search_term == 'exit':
+                entering_terms = False
+                should_quit = True
+
+            if search_term == 'snap':
+                take_snapshot(round_term, search_terms)
+            elif search_term.split(' ')[0] == 'delete':
+                if len(search_term.split(' ')) > 1:
+                    term_idx = int(search_term.split(' ')[1])
+                    if term_idx > 0 and term_idx <= len(search_terms):
+                        del search_terms[term_idx-1]
+            elif search_term == 'clear':
+                search_terms = []
+            elif search_term == 'new':
+                search_terms = []
+                entering_terms = False
+            else:
+                if len(search_terms) < 5:
+                    search_terms.append(search_term)
+    
+    print('\n\nGoodbye :)')
+
+def take_snapshot(round_term, search_terms):
+    print('\n\nTAKING SNAPSHOT, PLEASE WAIT...')
+
     browser = webdriver.Chrome(
         #executable_path=CHROMEDRIVER_PATH,
         chrome_options=chrome_options)
     browser.get('https://trends.google.com/trends/')
     searchbar = browser.find_element_by_tag_name('search').find_element_by_tag_name('input')
-    searchbar.send_keys(', '.join(terms))
+    searchbar.send_keys(', '.join(search_terms))
     searchbar.send_keys(Keys.ENTER)
 
     sleep(3)
 
     header = browser.find_element_by_class_name('explorepage-content-header')
     header_loc = header.location
-    header_size = header.size
 
     graph = browser.find_element_by_tag_name('widget')
     graph_loc = graph.location
@@ -48,17 +100,27 @@ def take_snapshot(terms):
             int(line_chart.size['height'] / 2))
     hover.perform()
 
-    browser.save_screenshot('screenshot.png')
+    snapshot_dir = './snapshots'
+    num_files = len(os.listdir(snapshot_dir))
+    file_name = '%s/%03d-snapshot-%s.png' % (snapshot_dir, num_files, round_term)
+
+    browser.save_screenshot(file_name)
     browser.quit()
 
-    img = Image.open('screenshot.png')
+    img = Image.open(file_name)
     left = graph_loc['x']
     top = header_loc['y']
     right = graph_loc['x'] + graph_size['width']
     bottom = graph_loc['y'] + graph_size['height']
 
     img = img.crop((left, top, right, bottom))
-    img.save('screenshot.png')
+    img.save(file_name)
+
+    final_img = Image.open(file_name)
+    final_img.show()
+
+    print('\n\nSNAPSHOT COMPLETE -- saved as ' + file_name)
+    print('\n\n')
 
 if __name__ == '__main__':
     repl()
