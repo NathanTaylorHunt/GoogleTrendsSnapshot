@@ -5,10 +5,10 @@ Use the terminal program to enter terms and effortlessly take snapshots.
 **NOTE: Currently assumes that you are running on Windows 10 and have Chrome installed.**
 
 ### Console View:
-![alt text](https://github.com/NathanTaylorHunt/GoogleTrendsSnapshot/raw/master/screenshot-console.png "Console Screenshot")
+<kbd>![alt text](https://github.com/NathanTaylorHunt/GoogleTrendsSnapshot/raw/master/screenshot-console.png "Console Screenshot")</kbd>
 
 ### Resulting Snapshot:
-![alt text](https://github.com/NathanTaylorHunt/GoogleTrendsSnapshot/raw/master/screenshot-graph.png "Console Screenshot")
+<kbd>![alt text](https://github.com/NathanTaylorHunt/GoogleTrendsSnapshot/raw/master/screenshot-graph.png "Console Screenshot")</kbd>
 
 ## How to Use
 Enter search terms by typing them into the console.  Terms are added to the list.
@@ -21,7 +21,7 @@ Enter search terms by typing them into the console.  Terms are added to the list
 ## Running the Standalone Exe
 For convenience, I built a standalone exe that can be run on Windows 10 without installing any dependencies.
 
-To run it, unzip PREBUILT-WIN10.zip, and run GoogleTrendsSnapshot.exe.
+To run it, unzip Standalone-Win10.zip, and run GoogleTrendsSnapshot.exe.
 
 By default, the snapshot files will be saved to the 'snapshots' folder in the same directory as the exe.
 
