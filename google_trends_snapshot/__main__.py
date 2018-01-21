@@ -2,6 +2,8 @@ import sys
 import os
 from time import sleep
 
+import configparser
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
@@ -9,17 +11,23 @@ from selenium.webdriver.chrome.options import Options
 
 from PIL import Image
 
-PROMPT = '> '
-AUTO_CAP = True
-WINDOW_SIZE = "1920,1080"
-#CHROMEDRIVER_PATH = './drivers'
+def read_options(config_file):
+    config = configparser.ConfigParser()
+    config.read(config_file)
 
-chrome_options = Options()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--window-size=%s' % WINDOW_SIZE)
-#chrome_options.binary_location = CHROME_PATH
+    options = {
+        'GoogleTrendsUrl': str(config['SETTINGS']['GoogleTrendsUrl']),
+        'Headless': config['SETTINGS'].getboolean('Headless'),
+        'WindowSize': str(config['SETTINGS']['WindowSize']),
+        'AutoCapitalize': config['SETTINGS'].getboolean('AutoCapitalize')
+    }
 
-def repl():
+    return options
+
+def repl(options):
+    PROMPT = '> '
+    AUTO_CAP = options['AutoCapitalize']
+
     cls()
     print('\nWELCOME TO GOOGLE TRENDS SNAPSHOT')
 
@@ -27,7 +35,7 @@ def repl():
     while not should_quit:
         print('\n\nEnter round term:')
         round_term = str(input(PROMPT))
-        if AUTO_CAP:
+        if options:
             round_term = round_term.upper()
 
         if round_term == 'exit':
@@ -67,7 +75,7 @@ def repl():
 
             if search_term == 'snap':
                 if len(search_terms) > 0:
-                    take_snapshot(round_term, search_terms)
+                    take_snapshot(options, round_term, search_terms)
                     delay_clear = True
             elif search_term.split(' ')[0] == 'delete':
                 if len(search_term.split(' ')) > 1:
@@ -88,18 +96,21 @@ def repl():
     
     print('\n\nGoodbye :)')
 
-def take_snapshot(round_term, search_terms):
+def take_snapshot(options, round_term, search_terms):
     print('\n\nTAKING SNAPSHOT, PLEASE WAIT...')
 
-    browser = webdriver.Chrome(
-        #executable_path=CHROMEDRIVER_PATH,
-        chrome_options=chrome_options)
-    browser.get('https://trends.google.com/trends/')
+    chrome_options = Options()
+    if options['Headless']:
+        chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--window-size=%s' % options['WindowSize'])
+
+    browser = webdriver.Chrome(chrome_options=chrome_options)
+    browser.get(options['GoogleTrendsUrl'])
     searchbar = browser.find_element_by_tag_name('search').find_element_by_tag_name('input')
     searchbar.send_keys(', '.join(search_terms))
     searchbar.send_keys(Keys.ENTER)
 
-    sleep(3)
+    sleep(3) # TODO: Use explicit wait.
 
     header = browser.find_element_by_class_name('explorepage-content-header')
     header_loc = header.location
@@ -141,4 +152,4 @@ def cls():
     os.system('cls' if os.name=='nt' else 'clear')
 
 if __name__ == '__main__':
-    repl()
+    repl(read_options('config.ini'))
