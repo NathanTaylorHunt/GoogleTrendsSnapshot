@@ -10,6 +10,7 @@ from selenium.webdriver.chrome.options import Options
 from PIL import Image
 
 PROMPT = '> '
+AUTO_CAP = True
 WINDOW_SIZE = "1920,1080"
 #CHROMEDRIVER_PATH = './drivers'
 
@@ -18,15 +19,16 @@ chrome_options.add_argument('--headless')
 chrome_options.add_argument('--window-size=%s' % WINDOW_SIZE)
 #chrome_options.binary_location = CHROME_PATH
 
-def repl(args=None):
-    if args is None:
-        args = sys.argv[1:]
-    
+def repl():
+    cls()
+    print('\nWELCOME TO GOOGLE TRENDS SNAPSHOT')
+
     should_quit = False
     while not should_quit:
-        cls()
         print('\n\nEnter round term:')
         round_term = str(input(PROMPT))
+        if AUTO_CAP:
+            round_term = round_term.upper()
 
         if round_term == 'exit':
             should_quit = True
@@ -64,8 +66,9 @@ def repl(args=None):
                 should_quit = True
 
             if search_term == 'snap':
-                take_snapshot(round_term, search_terms)
-                delay_clear = True
+                if len(search_terms) > 0:
+                    take_snapshot(round_term, search_terms)
+                    delay_clear = True
             elif search_term.split(' ')[0] == 'delete':
                 if len(search_term.split(' ')) > 1:
                     term_idx = int(search_term.split(' ')[1])
@@ -78,7 +81,10 @@ def repl(args=None):
                 entering_terms = False
             else:
                 if len(search_terms) < 5:
+                    if AUTO_CAP:
+                        search_term = search_term.upper()
                     search_terms.append(search_term)
+        cls()
     
     print('\n\nGoodbye :)')
 
