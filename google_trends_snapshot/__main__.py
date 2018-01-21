@@ -24,6 +24,7 @@ def repl(args=None):
     
     should_quit = False
     while not should_quit:
+        cls()
         print('\n\nEnter round term:')
         round_term = str(input(PROMPT))
 
@@ -31,9 +32,14 @@ def repl(args=None):
             should_quit = True
             return
 
+        delay_clear = False
         entering_terms = True
         search_terms = []
         while entering_terms:
+            if not delay_clear:
+                cls()
+            else:
+                delay_clear = False
             print('\n')
             print('ROUND: ' + round_term)
             if search_terms:
@@ -49,6 +55,8 @@ def repl(args=None):
             print('Type \'clear\' to clear search terms.')
             print('Type \'new\' to start a new round.')
             print('Type \'exit\' to quit.')
+            print('')
+
             search_term = str(input(PROMPT))
 
             if search_term == 'exit':
@@ -57,6 +65,7 @@ def repl(args=None):
 
             if search_term == 'snap':
                 take_snapshot(round_term, search_terms)
+                delay_clear = True
             elif search_term.split(' ')[0] == 'delete':
                 if len(search_term.split(' ')) > 1:
                     term_idx = int(search_term.split(' ')[1])
@@ -121,6 +130,9 @@ def take_snapshot(round_term, search_terms):
 
     print('\n\nSNAPSHOT COMPLETE -- saved as ' + file_name)
     print('\n\n')
+
+def cls():
+    os.system('cls' if os.name=='nt' else 'clear')
 
 if __name__ == '__main__':
     repl()
