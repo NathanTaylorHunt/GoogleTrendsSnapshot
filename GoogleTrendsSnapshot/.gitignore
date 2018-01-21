@@ -1,0 +1,6 @@
+
+# Ignore dotnet build folders
+obj/
+build/
+bin/
+lib/
