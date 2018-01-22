@@ -70,14 +70,14 @@ namespace GoogleTrendsSnapshot
         /// <returns>Options configured to defaults.</returns>
         public static Options GetDefaults()
         {
-            var result = new Options();
-            result.GoogleTrendsUrl = "https://trends.google.com/trends";
-            result.SnapshotDirectory = "./snapshots";
-            result.ChromeDriverDirectory = "./";
-            result.WindowSize = "1920,1080";
-            result.Headless = true;
-            result.AutoCapitalize = true;
-            return result;
+            var options = new Options();
+            options.GoogleTrendsUrl = "https://trends.google.com/trends";
+            options.SnapshotDirectory = "./snapshots";
+            options.ChromeDriverDirectory = "./driver";
+            options.WindowSize = "1920,1080";
+            options.Headless = true;
+            options.AutoCapitalize = true;
+            return options;
         }
 
         /// <summary>

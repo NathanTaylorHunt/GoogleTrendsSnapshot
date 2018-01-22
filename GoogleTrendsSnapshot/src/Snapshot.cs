@@ -18,8 +18,8 @@ namespace GoogleTrendsSnapshot
     public abstract class Snapshot
     {
         /// <summary>
-        /// Given a list of terms, take a snapshot of the
-        /// Google Trends line graph.
+        /// Given a list of terms, take a snapshot
+        /// of the Google Trends line graph.
         /// </summary>
         /// <returns>(Filename, Success)</returns>
         public static (string, bool) TakeSnapshot(List<string> searchTerms, Options options)
@@ -59,24 +59,24 @@ namespace GoogleTrendsSnapshot
                     Console.WriteLine("> Navigated to {0}", options.GoogleTrendsUrl);
 
                     // 2. Enter list of terms into search bar.
-                    var searchBar = driver.FindElementByCssSelector("search input");
+                    var searchBar = driver.FindElementByCssSelector("search input");                // @Hardcoded
                     var searchInput = String.Join(", ", searchTerms);
                     searchBar.SendKeys(searchInput);
                     searchBar.SendKeys(Keys.Enter);
                     Console.WriteLine("> Entered terms: {0}", searchInput);
                     
                     // 3. Setup snapshot (hover over most recent results).
-                    var header = driver.FindElementByClassName("explorepage-content-header");
+                    var header = driver.FindElementByClassName("explorepage-content-header");       // @Hardcoded
                     var headerLocation = header.Location;
-                    var graph = driver.FindElementByTagName("widget");
+                    var graph = driver.FindElementByTagName("widget");                              // @Hardcoded
                     var graphLocation = graph.Location;
                     var graphSize = graph.Size;
 
-                    var lineChart = driver.FindElementByCssSelector("line-chart-directive svg");
+                    var lineChart = driver.FindElementByCssSelector("line-chart-directive svg");    // @Hardcoded
                     var hoverAction = new Actions(driver);
                     hoverAction.MoveToElement(
                         lineChart,
-                        (int) Math.Round(lineChart.Size.Width * 0.98f),
+                        (int) Math.Round(lineChart.Size.Width * 0.98f), // @Hardcoded: Adjust for tiny bit of padding.
                         (int) Math.Round(lineChart.Size.Height / 2f));
                     hoverAction.Perform();
                     Console.WriteLine("> Setup trends graph.");
@@ -85,7 +85,7 @@ namespace GoogleTrendsSnapshot
                     var snapshot = (driver as ITakesScreenshot).GetScreenshot();
                     Console.WriteLine("> Took snapshot.");
 
-                    // 5. Crop snapshot.
+                    // 5. Crop snapshot, include header and graph.
                     var rect = new Rectangle(
                         x: graphLocation.X,
                         y: headerLocation.Y,
@@ -96,8 +96,8 @@ namespace GoogleTrendsSnapshot
                     var croppedSnapshot = (originalSnapshot as Bitmap).Clone(rect, originalSnapshot.PixelFormat);
                     Console.WriteLine("> Cropped snapshot.");
 
-                    // 5. Save file.
-                    filename = GetSnapshotFileName(options.SnapshotDirectory, "png");
+                    // 6. Save file.
+                    filename = GetSnapshotPath(options.SnapshotDirectory, "png");
                     croppedSnapshot.Save(filename, ImageFormat.Png);
                     Console.WriteLine("> Saved snapshot - {0}", filename);
                 }
@@ -108,20 +108,21 @@ namespace GoogleTrendsSnapshot
                 }
             }
 
+            // No problems, return success.
             return (filename, true);
         }
 
         /// <summary>
         /// Determine filename for snapshot.
         /// Format:
-        /// 000-snapshot.EXT
+        /// N_snapshot.EXT
         /// Number is determined by total files
         /// already in directory.
         /// </summary>
         /// <param name="directory">Snapshot directory.</param>
         /// <param name="extension">File extension.</param>
-        /// <returns>Filename for snapshot.</returns>
-        public static string GetSnapshotFileName(string directory, string extension)
+        /// <returns>Path for snapshot.</returns>
+        public static string GetSnapshotPath(string directory, string extension)
         {
             var fullDirectory = Path.GetFullPath(directory);
             var files = Directory.GetFiles(fullDirectory, "*", SearchOption.TopDirectoryOnly);
