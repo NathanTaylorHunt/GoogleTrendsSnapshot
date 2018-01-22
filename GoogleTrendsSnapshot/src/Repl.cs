@@ -70,12 +70,12 @@ namespace GoogleTrendsSnapshot
         }
 
         /// <summary>
-        /// Read the user's input.  Check for 'exit' command.
+        /// Read the user's input, parse for commands keywords.
         /// </summary>
         /// <param name="prompt">Prompt message.</param>
         /// <param name="autoCap">Auto capitalize.</param>
-        /// <returns>(User input, check for "exit" command)</returns>
-        private (string, Command) ReadUserInput(string prompt = "", bool autoCap = true)
+        /// <returns>(User input, Command)</returns>
+        private (string, Command) ReadUserInput(string prompt, bool autoCap = true)
         {
             Console.WriteLine(prompt);
             Console.Write(PROMPT_LINE);
@@ -88,7 +88,7 @@ namespace GoogleTrendsSnapshot
 
         /// <summary>
         /// Determine if input matches command keyword.
-        /// Input is converted to title case (ex: exit -> Exit).
+        /// Input is converted to uppercase to match enum names.
         /// If input is multiple tokens, only parse the first.
         /// If no match, return Command.Literal.
         /// </summary>
@@ -107,20 +107,19 @@ namespace GoogleTrendsSnapshot
         /// If list is empty, return "NONE".
         /// Otherwise, return a numbered list
         /// with the following format:
-        /// 
         /// (1) ITEM_1
         /// (2) ITEM_2
         /// ...
         /// (N) ITEM_N
         /// </summary>
         /// <param name="items">Collection of strings.</param>
-        /// <returns>Formatted list.</returns>
+        /// <returns>Formatted list as string.</returns>
         private string FormatList(ICollection<string> items)
         {
             if (items.Count == 0) return "NONE";
 
             var result = new StringBuilder();
-            result.Append("\n");
+            result.Append("\n"); // @Hardcoded: Newline for nicer formatting.
             foreach (var it in items.Select((x, i) => new { Value = x, Index = i }))
                 result.AppendLine(String.Format("  ({0}) \'{1}\'", it.Index+1, it.Value));
             return result.ToString();
@@ -133,6 +132,8 @@ namespace GoogleTrendsSnapshot
         /// <param name="newTerm">New term.</param>
         private void AddTerm(List<string> terms, string newTerm)
         {
+            if (newTerm == null || newTerm == "") return;
+
             int maxTerms = 5; // @Hardcoded, Google Trends only allows 5 terms max.
             if (terms.Count < maxTerms)
                 terms.Add(newTerm);
@@ -142,6 +143,8 @@ namespace GoogleTrendsSnapshot
         /// Delete term from list by index.
         /// Parse second token of input as index,
         /// index starts at 1.
+        /// If parsed index is outside bounds
+        /// of the list, do nothing.
         /// </summary>
         /// <param name="terms">List of terms.</param>
         /// <param name="input">Index as raw string input.</param>
@@ -149,10 +152,11 @@ namespace GoogleTrendsSnapshot
         {
             var index = 0;
             var tokens = input.Split(" ").ToArray();
-            if (tokens.Length != 2) return;
+            if (tokens.Length != 2) return; // @Hordcoded: Expecting format "delete N"
 
             if (int.TryParse(tokens[1], out index)) {
-                Console.WriteLine(index);
+                // Since the user is reading from the printed list, it
+                // makes sense to start the array at 1 for readability.
                 if (index > 0 && index <= terms.Count)
                     terms.RemoveAt(index-1);
             }
@@ -177,7 +181,7 @@ namespace GoogleTrendsSnapshot
             Console.WriteLine("\nTAKING SNAPSHOT - PLEASE WAIT...\n");
 
             var (filename, success) = Snapshot.TakeSnapshot(terms, options);
-            if (!success)   Console.WriteLine("\nERROR: Snapshot failed.");
+            if (!success)   Console.WriteLine("\nERROR: SNAPSHOT FAILED");
             else            Console.WriteLine("\nSNAPSHOT COMPLETE");
 
             Console.WriteLine("\nPRESS ANY KEY TO CONTINUE");
