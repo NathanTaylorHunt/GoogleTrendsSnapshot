@@ -2,6 +2,8 @@
 An automated tool for taking snapshots of the Google Trends line graph.
 Use the terminal program to enter terms and effortlessly take snapshots.
 
+Inspired by [Google Trends Show](https://www.youtube.com/playlist?list=PLbIc1971kgPCjKm56j_tNsetBn3PA5GaY) by [Funhaus](https://www.youtube.com/funhaus)
+
 **NOTE: Currently assumes that you are running on Windows 10 and have Chrome installed.**
 
 ### Console View:
