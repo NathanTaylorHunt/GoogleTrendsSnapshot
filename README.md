@@ -15,7 +15,7 @@ Inspired by [Google Trends Show](https://www.youtube.com/playlist?list=PLbIc1971
 ## How to Use
 Enter search terms by typing them into the console.  Terms are added to the list.
 
-+ Type 'snap' to take a snap shot with the previously entered terms.  Typing this will launch Chrome and take a snapshot, saving it to the snapshots folder.
++ Type 'snap' to take a snapshot with the previously entered terms.  Typing this will launch Chrome and take a snapshot, saving it to the snapshots folder.
 + Type 'delete' plus a number to delete a term from the list.
 + Type 'clear' to clear all terms from the list.
 + Type 'exit' to quit the program.
